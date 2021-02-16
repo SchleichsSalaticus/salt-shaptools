@@ -1,0 +1,32 @@
+name: Formula CI
+# this workflow will
+# - test repo with python 2.7
+# - test repo with python 3.6
+# - deliver the package content to the configured repository
+# - submit the new package content to the upstream repository
+on: [push, pull_request]
+env:
+  PACKAGE_NAME: salt-shaptools
+jobs:
+
+  testPython2:
+    runs-on: ubuntu-18.04
+    #if: ${{ github.event_name != 'pull_request' }} 
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Test python version 2.7
+      run: |
+        sudo apt-get install python-minimal
+        sudo python2 -V
+        sudo apt-get install python-pip
+        sudo pip --version
+        sudo pip install --upgrade pytest
+        sudo pip install pyzmq PyYAML pycrypto msgpack-python jinja2 psutil futures tornado pytest-salt mock pytest-cov enum34
+        sudo git clone --depth=50 https://github.com/openSUSE/salt ../salt
+        sudo rm ../salt/tests/conftest.py
+        sudo git clone --depth=50 https://github.com/SUSE/shaptools.git ../shaptools
+        sudo pip install -e ../salt
+        sudo pip install ../shaptools
+        /tests/run.sh

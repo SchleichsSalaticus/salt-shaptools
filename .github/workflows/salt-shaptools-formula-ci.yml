@@ -21,13 +21,12 @@ jobs:
         sudo apt-get install python-minimal
         sudo python2 -V
         sudo apt-get install python-pip
-        sudo pip --version
-        sudo pip install --upgrade pytest
-        sudo pip install pyzmq PyYAML pycrypto msgpack-python jinja2 psutil futures tornado pytest-salt mock pytest-cov enum34
+        sudo -H pip --version
+        sudo -H pip install --upgrade pytest
+        sudo -H pip install pyzmq PyYAML pycrypto msgpack-python jinja2 psutil futures tornado pytest-salt mock pytest-cov enum34
         sudo git clone --depth=50 https://github.com/openSUSE/salt ../salt
         sudo rm ../salt/tests/conftest.py
         sudo git clone --depth=50 https://github.com/SUSE/shaptools.git ../shaptools
-        sudo pip install -e ../salt
-        sudo pip install ../shaptools
-        sudo cd /tests
-        run.sh
+        sudo -H pip install -e ../salt
+        sudo -H pip install ../shaptools
+    -  run: sudo /home/runner/work/salt-shaptools/salt-shaptools/tests/run.sh

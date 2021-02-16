@@ -30,3 +30,29 @@ jobs:
         sudo -H pip install -e ../salt
         sudo -H pip install ../shaptools
     -  run: sudo /home/runner/work/salt-shaptools/salt-shaptools/tests/run.sh
+
+  testPython3:
+    runs-on: ubuntu-18.04
+    #if: ${{ github.event_name != 'pull_request' }} 
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Test python version 3.6
+      run: |
+        sudo apt-get install python3.6
+        python -V   
+        sudo apt-get install python-pip
+        sudo -H pip install --upgrade pytest
+        sudo -H pip install pyzmq PyYAML pycrypto msgpack-python jinja2 psutil futures tornado pytest-salt mock pytest-cov enum34
+        sudo git clone --depth=50 https://github.com/openSUSE/salt ../salt
+        sudo rm ../salt/tests/conftest.py
+        sudo git clone --depth=50 https://github.com/SUSE/shaptools.git ../shaptools
+        sudo -H pip install -e ../salt
+        sudo -H pip install ../shaptools
+    -  run: sudo apt-get install curl
+    -  run: sudo curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter  
+    -  run: chmod +x ./cc-test-reporter
+    -  run: ./cc-test-reporter before-build
+    -  run: sudo /home/runner/work/salt-shaptools/salt-shaptools/tests/run.sh
+ 
